@@ -38,8 +38,42 @@ For running the test simply call the *-tests bin generated in the build output d
 
 ## REST Data Format
 ```json
-Insert a sample returned entry here
+{
+  "id": 800017,
+  "name": "Amelia",
+  "city": "Charleston",
+  "age": 78,
+  "friends": [
+    {
+      "name": "Grace",
+      "hobbies": [
+        "Church Activities",
+        "Collecting",
+        "Dancing"
+      ]
+    },
+    {
+      "name": "Camila",
+      "hobbies": [
+        "Collecting",
+        "Martial Arts",
+        "Socializing"
+      ]
+    }
+  ]
+}
+
 ```
+We will call the top level JSON a User for the purpose of this application and call each friends entry a Friend. And denote fields in this document in C style ie. `user.name`
+Notes on User fields:
+`user.id` - This is a `uint` for a unique id for the user. Is not always present though. Not sure what policy should be on this.
+`user.name` - This is a `string` representing the name of the user. These are not unique it seems.
+`user.city` - This is a `string` representing the city of the user
+`user.age` - This is a `uint` representing the age of the user
+`user.friends` - This is an array of Friends
+
+`friend.name` - Seems to always be present but non-unique
+`friend.hobbies` - Seems to always be present? Can it be empty or missing?
 
 ## Output
 ```json

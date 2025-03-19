@@ -1,21 +1,55 @@
 {
-  "name": "Elijah",
-  "city": "Austin",
+  "id": 800017,
+  "name": "Amelia",
+  "city": "Charleston",
   "age": 78,
   "friends": [
     {
-      "name": "Michelle",
+      "name": "Grace",
       "hobbies": [
-        "Watching Sports",
-        "Reading",
-        "Skiing & Snowboarding"
+        "Church Activities",
+        "Collecting",
+        "Dancing"
       ]
     },
     {
-      "name": "Robert",
+      "name": "Camila",
       "hobbies": [
-        "Traveling",
-        "Video Games"
+        "Collecting",
+        "Martial Arts",
+        "Socializing"
+      ]
+    },
+    {
+      "name": "Jack",
+      "hobbies": [
+        "Bicycling",
+        "Quilting",
+        "Movie Watching"
+      ]
+    },
+    {
+      "name": "Daniel",
+      "hobbies": [
+        "Socializing",
+        "Yoga",
+        "Writing"
+      ]
+    },
+    {
+      "name": "Nora",
+      "hobbies": [
+        "Housework",
+        "Woodworking",
+        "Painting"
+      ]
+    },
+    {
+      "name": "Ava",
+      "hobbies": [
+        "Eating Out",
+        "Video Games",
+        "Dancing"
       ]
     }
   ]
