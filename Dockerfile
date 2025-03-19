@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     pkg-config \
     build-essential \
-    astyle
+    astyle \
+    libgtest-dev
 
 WORKDIR /fakerest-test
 
