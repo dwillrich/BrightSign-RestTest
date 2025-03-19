@@ -9,10 +9,13 @@ class SimpleUrlFetcher {
   public:
     SimpleUrlFetcher();
     ~SimpleUrlFetcher();
-    std::string fetchData(const std::string& url);
+    std::string fetchData(const std::string& url, bool writeToFile = false);
 
   private:
-    CURL* curl;
+    std::string mkTmp() const;
+
+    Logger* m_logger;
+    CURL* m_curl;
 };
 
 #endif // SIMPLE_URL_FETCHER_H
