@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     build-essential \
     astyle \
-    libgtest-dev
+    libgtest-dev \
+    jq
 
 WORKDIR /fakerest-test
 
