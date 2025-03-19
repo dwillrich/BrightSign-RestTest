@@ -1,0 +1,15 @@
+- Breakout JSON into a more managable data format
+- Look at smaller memory footprint JSON libs
+
+Smaller JSON Lib Options Per Google:
+RapidJSON:
+This library is known for its speed and memory efficiency. It offers both SAX and DOM-style APIs and allocates memory compactly during parsing. Each JSON value occupies a fixed size (16 bytes on most 32/64-bit systems, excluding strings).
+DebugJSON:
+Designed specifically for embedded systems and debugging purposes, DebugJSON prioritizes low RAM and flash usage. It operates without dynamic memory allocation and doesn't require parsing or unparsing the entire JSON string at once.
+jsmn:
+This is a minimal, zero-allocation JSON parser. It's suitable for situations with strict memory constraints, such as embedded systems. However, its interface might be considered less user-friendly compared to other libraries.
+Glaze:
+This modern C++ library focuses on in-memory JSON processing, achieving high speed and memory efficiency by directly reading and writing from object memory.
+Light-foot JSON:
+This library is designed to minimize memory usage, often consuming less space than the original JSON string itself. It uses a custom hash table to deduplicate strings, which reduces memory footprint but may impact deserialization speed.
+
