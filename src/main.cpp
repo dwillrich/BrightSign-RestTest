@@ -15,6 +15,16 @@ int main(int argc, char* argv[]) {
     logger.logInfo("Fetching data from: " + url);
 
     SimpleUrlFetcher fetcher;
+
+    // This doesn't work right now so comment out and loop through data line by line instead
+    // All this and sometimes it isn't sent one item a line!
+    // auto lineCb = [](const std::string& line) {
+    //     // std::cout << line << std::endl;
+    // };
+    // fetcher.fetchDataByLine(url, lineCb);
+    // return 0;
+
+    // Old fetch whole thing
     std::string response = fetcher.fetchData(url);
 
     if (response.empty()) {
