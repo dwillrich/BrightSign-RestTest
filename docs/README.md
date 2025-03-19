@@ -22,6 +22,7 @@ Using the data retreived from the endpoint, calculate #1 and #2.  Unless you hav
 
 1. average age of all users per city
 2. average number of friends per city
+
 3. the user with the most friends per city
 4. the most common first name in all cities
 5. the most common hobby of all friends of users in all cities
