@@ -12,6 +12,8 @@ int main(int argc, char* argv[]) {
     Logger& logger = Logger::getInstance();
     std::string url = "http://test.brightsign.io:3000";
 
+    // Leaving this even though default is way easier
+    // Requirements said param so param it is
     if (argc > 1) {
         url = argv[1];
     }
@@ -27,6 +29,8 @@ int main(int argc, char* argv[]) {
     }
 
     // For debugging save the REST data to file
+    // Too useful to fully delete yet
+    #if 0
     std::string restDataFile = MiscUtils::writeStringToTmpFile(response);
     if(restDataFile != "" ) {
         logger.logInfo("Wrote REST data to : " + restDataFile);
@@ -34,6 +38,7 @@ int main(int argc, char* argv[]) {
         logger.logError("Failed to write REST data to file");
         return 1;
     }
+    #endif
 
     std::vector<User> users;
     bool jsonParsed = buildUserVectorFromJsonString(response, users);
