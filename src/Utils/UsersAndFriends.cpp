@@ -8,15 +8,13 @@ namespace UsersAndFriends {
 void from_json(const json& j, Friend& f) {
     if(j.contains("name")) {
         f.name = j.at("name").get<std::string>();
-    }
-    else {
+    } else {
         f.name = "Anonymous";
     }
 
     if(j.contains("hobbies")) {
         f.hobbies= j.at("hobbies").get<std::vector<std::string>>();
-    }
-    else {
+    } else {
         // What do you do all day?
         // j.hobbies = [];
     }
@@ -50,7 +48,7 @@ void to_log(const Friend& f, Logger& logger) {
         hobbiesStr += (f.hobbies)[i];
         if (i < f.hobbies.size() - 1) {
             hobbiesStr += ", ";
-        } 
+        }
     }
     logger.logInfo("  - " + (f.name ? *f.name : "N/A") + " (" + hobbiesStr + ")");
 }
@@ -88,7 +86,8 @@ bool buildUserVectorFromFile(std::string fileName, std::vector<User>& users) {
     json j;
     try {
         file >> j;
-        // Annoyingly 
+
+        // Annoyingly daya is sometimes an array sometimes not
         if (j.is_array()) {
             users = j.get<std::vector<User>>();
         } else {

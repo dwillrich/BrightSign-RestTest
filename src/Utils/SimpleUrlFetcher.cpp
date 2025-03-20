@@ -67,11 +67,10 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
     };
 
     curl_easy_setopt(m_curl, CURLOPT_URL, url.c_str());
-    if(writeToFile){
+    if(writeToFile) {
         curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, writeToFileCallback);
         curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, outFile);
-    }
-    else {
+    } else {
         curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, static_cast<size_t (*)(void*, size_t, size_t, void*)>(writeCallback));
         curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &responseData);
     }
@@ -85,16 +84,14 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
     if (res != CURLE_OK) {
         m_logger->logError("CURL request failed: " + std::string(curl_easy_strerror(res)));
         return "";
-    }
-    else {
+    } else {
         m_logger->logInfo("Successfully fetched data from: " + url);
     }
 
     if(writeToFile) {
         m_logger->logInfo("Response written to: " + tempFilePath);
         return tempFilePath;
-    }
-    else {
+    } else {
         return responseData;
     }
 }

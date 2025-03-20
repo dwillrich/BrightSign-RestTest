@@ -35,15 +35,14 @@ int main(int argc, char* argv[]) {
 
     // For debugging save the REST data to file
     std::string restDataFile = MiscUtils::writeStringToTmpFile(response);
-    if(restDataFile != "" ){
+    if(restDataFile != "" ) {
         logger.logInfo("Wrote REST data to : " + restDataFile);
-    }
-    else {
+    } else {
         logger.logError("Failed to write REST data to file");
         return 1;
     }
-    
-    
+
+
 
     return 0;
 }
