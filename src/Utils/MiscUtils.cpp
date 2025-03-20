@@ -13,7 +13,7 @@ std::string mkTmp() {
     return std::string(tempFile);
 }
 
-std::string writeStringToTmpFile(std::string& str) {
+std::string writeStringToTmpFile(const std::string& str) {
     std::string tmpFile = mkTmp();
     std::ofstream output_file(tmpFile);
     if (output_file.is_open()) {

@@ -14,8 +14,6 @@ class Logger {
   private:
     Logger();
     ~Logger();
-    // Logger() = default;
-    // ~Logger() = default;
 
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;

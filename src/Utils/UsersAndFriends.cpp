@@ -13,11 +13,6 @@ void to_json(json& j, const Friend& f) {
     j["hobbies"] = f.hobbies;
 }
 
-// void to_json(json& j, const std::vector<Friend>& fs) {
-//     json ij = json(fs);
-//     j = ij;
-// }
-
 void to_json(json& j, const User& u) {
     if(u.id) {
         j["id"] = *u.id;
@@ -123,7 +118,7 @@ bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users)
             // In production anything but this path would be tossed as invalid.
             users = j.get<std::vector<User>>();
         } else {
-            // This happens too often just shut the log up its like 50% of the time
+            // This happens too often just shut the log up its like >50% of the time
             // logger.logInfo("Invalid JSON format. Expected an array. Dealing with it anyway");
 
             // Already piped in one entry so process that outside the loop

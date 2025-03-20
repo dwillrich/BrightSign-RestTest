@@ -7,7 +7,7 @@
 
 namespace MiscUtils {
 std::string mkTmp();
-std::string writeStringToTmpFile(std::string& str);
+std::string writeStringToTmpFile(const std::string& str);
 };
 
 #endif // MISC_UTILS_H
