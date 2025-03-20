@@ -67,6 +67,9 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
     };
 
     curl_easy_setopt(m_curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(m_curl, CURLOPT_FAILONERROR, 1L);
+    curl_easy_setopt(m_curl, CURLOPT_TIMEOUT, 5L); // 5 Second timeout is arbitrary but good enough
+
     if(writeToFile) {
         curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, writeToFileCallback);
         curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, outFile);
@@ -75,17 +78,32 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
         curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &responseData);
     }
 
+    long http_code = 0;
     CURLcode res = curl_easy_perform(m_curl);
+    curl_easy_getinfo(m_curl, CURLINFO_RESPONSE_CODE, &http_code);
 
     if (outFile) {
         fclose(outFile);
     }
 
+    // This is a HACK but seems the API is returning 200 but sending a html page with the error ie. 400 Bad Request
+    std::istringstream f(responseData);
+    std::string firstLine;
+    std::getline(f, firstLine);
+    if(firstLine.find("400 Bad Request") != std::string::npos) {
+        m_logger->logError("CURL override http_code : 400");
+        http_code = 400;
+    }
+    // End hack zone
+
     if (res != CURLE_OK) {
         m_logger->logError("CURL request failed: " + std::string(curl_easy_strerror(res)));
         return "";
+    } else if(http_code == 200) {
+        m_logger->logInfo("Successfully fetched data from: " + url + " HTTP Code : " + std::to_string(http_code));
     } else {
-        m_logger->logInfo("Successfully fetched data from: " + url);
+        m_logger->logError("CURL got HTTP code : " + std::to_string(http_code));
+        return "";
     }
 
     if(writeToFile) {
@@ -96,7 +114,7 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
     }
 }
 
-
+// Not well tested probably wouldn't use
 bool SimpleUrlFetcher::fetchDataByLine(const std::string& url, std::function<void(const std::string&)> lineCallback) {
     if (!m_curl) {
         m_logger->logError("CURL initialization failed.");

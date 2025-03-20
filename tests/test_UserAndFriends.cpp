@@ -1,27 +1,8 @@
 #include <gtest/gtest.h>
 #include "UsersAndFriends.h"
 #include <filesystem>
-
-// // Test valid URLs
-// TEST(UrlValidatorTest, ValidUrls) {
-//     EXPECT_TRUE(UrlValidator::isValid("http://example.com"));
-//     EXPECT_TRUE(UrlValidator::isValid("https://www.google.com"));
-//     EXPECT_TRUE(UrlValidator::isValid("https://sub.domain.example.org"));
-//     EXPECT_TRUE(UrlValidator::isValid("http://localhost:8080"));
-//     EXPECT_TRUE(UrlValidator::isValid("https://example.com/path/to/page"));
-// }
-
-// // Negative cases
-// TEST(UrlValidatorTest, InvalidUrls) {
-//     EXPECT_FALSE(UrlValidator::isValid("ftp://example.com"));      // Invalid scheme
-//     EXPECT_FALSE(UrlValidator::isValid("htt://badurl.com"));       // Typo in scheme
-//     EXPECT_FALSE(UrlValidator::isValid("http:/missing-slash.com"));// Missing slash
-//     EXPECT_FALSE(UrlValidator::isValid("://missing-scheme.com"));  // Missing scheme
-//     EXPECT_FALSE(UrlValidator::isValid("example.com"));            // No scheme
-//     EXPECT_FALSE(UrlValidator::isValid("http://"));                // Empty domain
-//     EXPECT_FALSE(UrlValidator::isValid("potato"));                 // nonsense
-
-// }
+#include "SimpleUrlFetcher.h"
+#include "MiscUtils.h"
 
 TEST(UsersAndFriendsTest, ProcessAllSamplesInDir) {
     Logger& logger = Logger::getInstance();
@@ -54,6 +35,40 @@ TEST(UsersAndFriendsTest, ProcessAllSamplesInDir) {
         users.clear();
     }
 
+    for(auto f : badFiles) {
+        std::cout << f << std::endl;
+    }
+}
+
+// This is less of a unit test but saves effort of saving files
+// Doesn't do any inteligent checking of the parsed data but ensures we can handle everything the url hits us with
+// Have ran with 1000 itterations, 100 is probably okay though
+TEST(UsersAndFriendsTest, ProcessFromAPI) {
+    Logger& logger = Logger::getInstance();
+    std::string url = "http://test.brightsign.io:3000";
+
+    using namespace UsersAndFriends;
+
+    std::vector<User> users;
+    std::vector<std::string> badFiles;
+
+    for(int i = 0; i < 100; i++) {
+        SimpleUrlFetcher fetcher;
+        std::string response = fetcher.fetchData(url);
+
+        if (response.empty()) {
+            logger.logError("Failed to fetch data from URL.");
+            continue;
+        }
+
+        bool parsed = buildUserVectorFromJsonString(response, users);
+        EXPECT_TRUE(parsed);
+        if(!parsed) {
+            // Write to file if we fail to parse
+            badFiles.push_back(MiscUtils::writeStringToTmpFile(response));
+        }
+        users.clear();
+    }
     for(auto f : badFiles) {
         std::cout << f << std::endl;
     }

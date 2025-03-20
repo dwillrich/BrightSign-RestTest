@@ -75,23 +75,18 @@ void to_log(const User& u) {
     to_log(u, Logger::getInstance());
 }
 
-bool buildUserVectorFromFile(std::string fileName, std::vector<User>& users) {
+bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users) {
     Logger& logger = Logger::getInstance();
-    std::ifstream file(fileName);
-    if (!file) {
-        logger.logError("Error opening file: " + fileName);
-        return false;
-    }
-
     json j;
     try {
-        file >> j;
+        iStream >> j;
 
-        // Annoyingly daya is sometimes an array sometimes not
+        // Annoyingly data is sometimes an array sometimes not
         if (j.is_array()) {
             users = j.get<std::vector<User>>();
         } else {
-            logger.logInfo("Invalid JSON format. Expected an array. Dealing with it anyway");
+            // This happens too often just shut the log up its like 50% of the time
+            // logger.logInfo("Invalid JSON format. Expected an array. Dealing with it anyway");
 
             // Already piped in one entry so process that outside the loop
             auto person = j.get<User>();
@@ -99,8 +94,8 @@ bool buildUserVectorFromFile(std::string fileName, std::vector<User>& users) {
 
             // Check if the line is valid json first
             // Stop processing if invalid JSON is found
-            while (j.accept(file)) {
-                file >> j;
+            while (j.accept(iStream)) {
+                iStream >> j;
                 auto user = j.get<User>();
                 users.push_back(user);
             }
@@ -108,17 +103,36 @@ bool buildUserVectorFromFile(std::string fileName, std::vector<User>& users) {
     } catch (const json::parse_error& e) {
         logger.logError("This should never happen with API as implemented but catch anyway!");
         logger.logError(e.what());
-        if (file.is_open()) {
-            file.close();
-        }
         return false;
     }
+
+    return true;
+}
+
+bool buildUserVectorFromJsonString(const std::string& jsonStr, std::vector<User>& users) {
+    std::istringstream jsonStream(jsonStr);
+    return buildUserVectorFromIstream(jsonStream, users);
+}
+
+bool buildUserVectorFromFile(const std::string& fileName, std::vector<User>& users) {
+    Logger& logger = Logger::getInstance();
+    std::ifstream file(fileName);
+    if (!file) {
+        logger.logError("Error opening file: " + fileName);
+        return false;
+    }
+
+    // File is empty nothing to do
+    if(file.peek() == std::ifstream::traits_type::eof()) {
+        return true;
+    }
+
+    bool retVal = buildUserVectorFromIstream(file, users);
 
     if (file.is_open()) {
         file.close();
     }
-
-    return true;
+    return retVal;
 }
 
 }

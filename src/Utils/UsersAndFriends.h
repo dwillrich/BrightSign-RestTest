@@ -35,8 +35,10 @@ void to_log(const Friend& f);
 void to_log(const User& u, Logger& logger);
 void to_log(const User& u);
 
-bool buildUserVectorFromFile(std::string fileName, std::vector<User>& users);
+bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users);
+bool buildUserVectorFromJsonString(const std::string& jsonStr, std::vector<User>& users);
+bool buildUserVectorFromFile(const std::string& fileName, std::vector<User>& users);
 
-};
+}
 
 #endif // USERS_AND_FRIENDS_H

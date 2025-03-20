@@ -92,6 +92,8 @@ Insert a sample response here
 
 ## Security Considerations
 TODO - Add security notes here on access tokens OAuth SSL etc.
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
 ## Error Handling
 TODO - Note on the error handling implemented
