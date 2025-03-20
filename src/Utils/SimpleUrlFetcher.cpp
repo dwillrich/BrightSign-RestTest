@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
+#include "MiscUtils.h"
 
 SimpleUrlFetcher::SimpleUrlFetcher() {
     m_curl = curl_easy_init();
@@ -19,18 +20,6 @@ SimpleUrlFetcher::~SimpleUrlFetcher() {
         curl_easy_cleanup(m_curl);
     }
 }
-
-// This really should return a file descriptor or something but just using for debugging so is fine for now
-std::string SimpleUrlFetcher::mkTmp() const {
-    char tempFile[] = "/tmp/fakeRestData-XXXXXX";
-    int fd = mkstemp(tempFile);
-    if (fd == -1) {
-        return "";
-    }
-    close(fd);
-    return std::string(tempFile);
-}
-
 
 std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile) {
     // Validate URL
@@ -49,7 +38,7 @@ std::string SimpleUrlFetcher::fetchData(const std::string& url, bool writeToFile
     FILE* outFile = nullptr;
 
     if (writeToFile) {
-        tempFilePath = mkTmp();
+        tempFilePath = MiscUtils::mkTmp();
         if (tempFilePath.empty()) {
             m_logger->logError("Failed to create a temporary file.");
             return "";

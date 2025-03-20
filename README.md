@@ -75,6 +75,11 @@ Notes on User fields:
 `friend.name` - Seems to always be present but non-unique
 `friend.hobbies` - Seems to always be present? Can it be empty or missing?
 
+General Notes:
+- Always seems to be valid JSON
+- Sometimes is sent as an array [] -> ruins streaming the url line by line
+- Sometimes is sent as a json object per line 
+
 ## Output
 ```json
 Insert a sample response here

@@ -11,7 +11,7 @@ include_directories(${JSONCPP_INCLUDE_DIRS})
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
-file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB SRC_FILES src/*.cpp)
 file(GLOB_RECURSE HEADER_FILES src/*.h)
 file(GLOB_RECURSE UTILS_FILES src/Utils/*.cpp)
 file(GLOB_RECURSE UTILS_HEADERS src/Utils/*.h)
