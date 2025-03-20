@@ -3,46 +3,38 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include "json.hpp"
+#include "Logger.h"
 
-class Friend {
-public:
-    std::string name;
+// Don't like doing this in header but fine for now
+using json = nlohmann::json;
+
+namespace UsersAndFriends {
+
+struct Friend {
+    std::optional<std::string> name;
     std::vector<std::string> hobbies;
-
-    // Function to load friend from a JSON object
-    void fromJson(const Json::Value& j) {
-        name = j["name"].asString();  // Get the friend's name
-
-        // Parse the list of hobbies (assumed to be an array)
-        for (const auto& hobby : j["hobbies"]) {
-            hobbies.push_back(hobby.asString());
-        }
-    }
 };
-    
-// Class for the main user (User class)
-class User {
-public:
-    int id;
-    std::string name;
-    std::string city;
-    int age;
+
+struct User {
+    std::optional<int> id;
+    std::optional<std::string> name;
+    std::optional<std::string> city;
+    std::optional<int> age;
     std::vector<Friend> friends;
+};
 
-    // Function to load user from a JSON object
-    void fromJson(const Json::Value& j) {
-        id = j["id"].asInt();                 // Get the id
-        name = j["name"].asString();          // Get the name
-        city = j["city"].asString();          // Get the city
-        age = j["age"].asInt();               // Get the age
+void from_json(const json& j, Friend& f);
+void from_json(const json& j, User& p);
 
-        // Parse the list of friends
-        for (const auto& f : j["friends"]) {
-            Friend friendObj;
-            friendObj.fromJson(f);
-            friends.push_back(friendObj);
-        }
-    }
+// Can probably just print JSON here but this is fine
+void to_log(const Friend& f, Logger& logger);
+void to_log(const Friend& f);
+void to_log(const User& u, Logger& logger);
+void to_log(const User& u);
+
 };
 
 #endif // USERS_AND_FRIENDS_H
