@@ -49,6 +49,7 @@ int main(int argc, char* argv[]) {
     bool jsonParsed = buildUserVectorFromJsonString(response, users);
     logger.logInfo("Got the following user count: " + std::to_string(users.size()));
     if(!jsonParsed) {
+        logger.logError("JSON Parsing Fail -> User Count: " + std::to_string(users.size()));
         return 1;
     } else {
         auto q1 = averageAgeOfUsersPerCity(users);
