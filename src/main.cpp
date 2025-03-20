@@ -4,6 +4,9 @@
 #include "UsersAndFriends.h"
 #include <fstream>
 #include "MiscUtils.h"
+#include "UserAnalytics.h"
+
+using namespace UsersAndFriends;
 
 int main(int argc, char* argv[]) {
     Logger& logger = Logger::getInstance();
@@ -42,7 +45,21 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-
+    std::vector<User> users;
+    bool jsonParsed = buildUserVectorFromJsonString(response, users);
+    logger.logInfo("Got the following user count: " + std::to_string(users.size()));
+    if(!jsonParsed) {
+        return 1;
+    } else {
+        auto q1 = averageAgeOfUsersPerCity(users);
+        for (std::map<std::string, double>::iterator it = q1.begin(); it != q1.end(); ++it) {
+            std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
+        }
+        auto q2 = averageFriendsPerCity(users);
+        for (std::map<std::string, double>::iterator it = q2.begin(); it != q2.end(); ++it) {
+            std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
+        }
+    }
 
     return 0;
 }

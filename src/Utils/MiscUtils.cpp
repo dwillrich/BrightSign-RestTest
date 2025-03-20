@@ -23,4 +23,5 @@ std::string writeStringToTmpFile(std::string& str) {
     }
     return "";
 }
-}
+
+} // namespace MiscUtils

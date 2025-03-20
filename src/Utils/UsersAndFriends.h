@@ -39,6 +39,6 @@ bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users)
 bool buildUserVectorFromJsonString(const std::string& jsonStr, std::vector<User>& users);
 bool buildUserVectorFromFile(const std::string& fileName, std::vector<User>& users);
 
-}
+} // namespace UsersAndFriends
 
 #endif // USERS_AND_FRIENDS_H
