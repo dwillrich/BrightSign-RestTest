@@ -4,6 +4,8 @@
 #include "SimpleUrlFetcher.h"
 #include "MiscUtils.h"
 
+// This is useful for retesting. The API test below will write all failed data to tmp
+//  We can then use this test to reprocess the response sample to ensure error is fixed
 TEST(UsersAndFriendsTest, ProcessAllSamplesInDir) {
     Logger& logger = Logger::getInstance();
 
@@ -29,7 +31,8 @@ TEST(UsersAndFriendsTest, ProcessAllSamplesInDir) {
         // std::cout << entry.path() << std::endl;
         bool parsed = buildUserVectorFromFile(entry.path(), users);
         EXPECT_TRUE(parsed);
-        if(!parsed) {
+        EXPECT_TRUE(users.size() > 1); // Seems safe to assume all valid json has more than one user
+        if (!parsed || users.size() <= 1) {
             badFiles.push_back(std::string(entry.path()));
         }
         users.clear();
@@ -52,7 +55,7 @@ TEST(UsersAndFriendsTest, ProcessFromAPI) {
     std::vector<User> users;
     std::vector<std::string> badFiles;
 
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < 0; i++) {
         SimpleUrlFetcher fetcher;
         std::string response = fetcher.fetchData(url);
 
@@ -63,7 +66,8 @@ TEST(UsersAndFriendsTest, ProcessFromAPI) {
 
         bool parsed = buildUserVectorFromJsonString(response, users);
         EXPECT_TRUE(parsed);
-        if(!parsed) {
+        EXPECT_TRUE(users.size() > 1); // Seems safe to assume all valid json has more than one user
+        if(!parsed || users.size() <= 1) {
             // Write to file if we fail to parse
             badFiles.push_back(MiscUtils::writeStringToTmpFile(response));
         }

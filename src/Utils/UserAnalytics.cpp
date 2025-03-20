@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include <iostream>
 #include <fstream>
+#include "Logger.h"
 
 namespace UsersAndFriends {
 
@@ -30,6 +31,7 @@ std::map<std::string, std::vector<User>> getCityUserMap(const std::vector<User>&
 // Should run in O(2n)?????????
 // For now do not do in place and take easy route using more memory
 std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users) {
+    Logger& logger = Logger::getInstance();
     std::map<std::string,double> retVal;
     auto cityMap = getCityUserMap(users);
     std::vector<int> agesInCity;
@@ -37,6 +39,8 @@ std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& u
         for(auto user : city.second) {
             if(user.age) {
                 agesInCity.push_back(*user.age);
+            } else {
+                logger.logError("Missing Age For User! Skipping - " + (user.name ? *user.name : "Anon"));
             }
         }
         retVal[city.first] = average_vector(agesInCity);

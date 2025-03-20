@@ -1,7 +1,7 @@
 # Fake Rest Test
 
 ## Overview
-Simple rest application to fetch JSON data from url and parse it to return various calculations. As it is just being built natively for x86 no cross compilation considerations were made for the build environment but could easily be added with CMake.  
+Simple rest application to fetch JSON data from url and parse it to return various calculations. As it is just being built natively for x86 no cross compilation considerations were made for the build environment but could easily be added with CMake. Optionally can be built in Docker image.
 
 ## Source Breakdown
 ### src/Utils
@@ -12,6 +12,8 @@ A quick logging implementation for the application to easily switch where debug 
 Small class to wrap curl calls to a given URL. This in a more general use case could be expanded to make REST calls with proper security measures in place. See security section below.  
 #### src/Utils/UrlValidator.*
 A very small class with a simple regex to check if a URL is valid. Mainly used just as an example of a testable class and to push forward some of the boilerplate tooling required for the repository. 
+#### src/Utils/UsersAndFriends.*
+Class for parsing JSON into User C++ objects and ability to log classes if desired (unused). Can convert a string with json or a file containing json data to a vecotr of Users. 
 
 ## Building / Running
 Building and developed on Ubuntu so mileage may vary with other distros.
@@ -91,17 +93,46 @@ Insert a sample response here
 ```
 
 ## Security Considerations
-TODO - Add security notes here on access tokens OAuth SSL etc.
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+Ideally this API would have a valid SSL certificate that we could verify and we could use the following curl options to verify it.
+```c
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L); 
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+```
+If this was actual production userdata we would want to secure the data with some form of encryption such as TLS and thus use HTTPS.
+If this was actual production userdata we would want to add some sort of authentication to the endpoint as well and not leave it open. Likely use some sort of JWT or OAth token passing from the client. 
 
 ## Error Handling
-TODO - Note on the error handling implemented
-
-
+The general error handling philosophy used in the application varies based on function. For the data fetching all error cases are pushed up to the caller with invalid/null response data. For the parsing of Users data the error handling is a bit more forgiving to allow for the poor API. When JSON syntax errors occur we will process all data up to that error and log the error (see BUG-4), parsing will return false but the data to that point will still be returned for caller to decide what to do. The top level will return 0 with the json analytics printed if everything is processed correctly and return 1 in all error cases. 
 
 ## System Requirements & Assumptions
-TODO - Talk about memory footprint required for this
-TODO - Talk about use of JSONCpp or other JSON lib
-TODO - Optional
+### Memory
+This implementation expects sufficient RAM to hold the returned data for the REST endpoint and enough RAM to hold an additional copy of the data as c++ classes. If RAM consumption is an issue the REST response could be written to file and manipulated there but for simplicity sake it is handled in RAM. The SimpleUrlFetcher is provisioned to handle writing to file and the parsing also can accept a file as input. These were useful in testing but could be used in a production client. Additionally the SimpleUrlFetcher can do processing line by line to avoid the full response and C structs being in RAM at the same time, this would ideally be used if data is sent one User object per line. Data is passed by const reference or referance where ever possible and as for the Analytics it is done with shared pointers to avoid copy operations. 
 
+### Execution Speed
+- The API is given 5 seconds to respond. This is arbitrary but I tried to test with throttled network and it seemed sufficient. 
+- Notes on the analytics performance can be seen in the comments in UserAnalytics.cpp
+- Threading could be used for the data processing to achieve better throughput but in theory it may be better to have the calling application specify which result it wants and run each analytic task on its own thread with the memory consuption increasing being the tradeoff here. 
+
+### Improvements
+Other stuff.
+
+## API Issues
+In summary this API is far from ideal and is not production ready. Building out the client there are a number of issues seen that will be listed here as issue tickets `BUG-<num>`. This is not an all inclusive list as I am sure there are some overlooked here. 
+
+#### BUG-1 : [API][Major] API Does not properly HTTP return error codes
+- As see with 400 error code as well as 500 the curl of the API will return a HTML page stating the error but still return 200
+
+#### BUG-2 : [API][Major] Inconsistent API return data format
+- The list of users returned is not consistently formatted. It is sent in one of three ways from testing : a JSON array of Users, a concatenated set of users (non-comma seperated or in square brackets), and a list of users with one JSON object per line. 
+
+#### BUG-3 : [API][Minor] Trailing whitespace at end of data
+- The API will return with trailing whitespace at end of data. This is more of an annoyance than a bug. 
+
+#### BUG-3 : [API][Major] Users occationally missing fields.
+- The API will return Users that do not have all fields populated. This has been commonly seen with `id` field but also seen with `age` as well
+- For now we ignore missing `id` in the client and users with no `age` are skipped when age analytics are being done.
+
+#### BUG-4 : [API][Major] JSON returned occasionally not parsable by `jq`
+- This is where I drew a line in the sand on "nicely" handling the API responses. Occasionally even jq does not properly parse the responses containing JSON data returned.
+- Would be easy enough to gather more data on this by modifying the getSampleResponses.sh tools script to pipe to jq and only save off the responses that fail that check.
+- Quick glance and I see `]}]}{` at the end of a line occasionally and just stop processing data after that error occurs.  

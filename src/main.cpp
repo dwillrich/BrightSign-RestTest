@@ -52,10 +52,13 @@ int main(int argc, char* argv[]) {
         return 1;
     } else {
         auto q1 = averageAgeOfUsersPerCity(users);
+        std::cout << "---------Q1 : averageAgeOfUsersPerCity---------" << std::endl;
         for (std::map<std::string, double>::iterator it = q1.begin(); it != q1.end(); ++it) {
             std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
         }
+
         auto q2 = averageFriendsPerCity(users);
+        std::cout << "---------Q2 : averageFriendsPerCity---------" << std::endl;
         for (std::map<std::string, double>::iterator it = q2.begin(); it != q2.end(); ++it) {
             std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
         }

@@ -75,6 +75,11 @@ void to_log(const User& u) {
     to_log(u, Logger::getInstance());
 }
 
+bool is_whitespace_only_ws(std::istream& is) {
+    is >> std::ws;
+    return is.peek() == EOF;
+}
+
 bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users) {
     Logger& logger = Logger::getInstance();
     json j;
@@ -83,21 +88,27 @@ bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users)
 
         // Annoyingly data is sometimes an array sometimes not
         if (j.is_array()) {
+            // This is happy path but should be how the API just gives us the data.
+            // In production anything but this path would be tossed as invalid.
             users = j.get<std::vector<User>>();
         } else {
             // This happens too often just shut the log up its like 50% of the time
             // logger.logInfo("Invalid JSON format. Expected an array. Dealing with it anyway");
 
             // Already piped in one entry so process that outside the loop
-            auto person = j.get<User>();
-            users.push_back(person);
+            auto user = j.get<User>();
+            users.push_back(user);
 
-            // Check if the line is valid json first
-            // Stop processing if invalid JSON is found
-            while (j.accept(iStream)) {
+            // Stop processing if we hit only white space
+            while (!is_whitespace_only_ws(iStream)) {
                 iStream >> j;
-                auto user = j.get<User>();
-                users.push_back(user);
+                try {
+                    auto user = j.get<User>();
+                    users.push_back(user);
+                } catch (const json::parse_error& e) {
+                    // Not valid User? What do we do here
+                    logger.logError(e.what());
+                }
             }
         }
     } catch (const json::parse_error& e) {
