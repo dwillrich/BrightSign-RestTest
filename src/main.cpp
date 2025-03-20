@@ -63,6 +63,21 @@ int main(int argc, char* argv[]) {
         for (std::map<std::string, double>::iterator it = q2.begin(); it != q2.end(); ++it) {
             std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
         }
+
+        auto q3 = mostPopularUserPerCity(users);
+        std::cout << "---------Q3 : mostPopularUserPerCity---------" << std::endl;
+        for (std::map<std::string, User>::iterator it = q3.begin(); it != q3.end(); ++it) {
+            std::cout << "Key: " << it->first << ", Value: " << *it->second.name << std::endl;
+        }
+
+        auto q4 = mostPopularName(users);
+        std::cout << "---------Q4 : mostPopularName---------" << std::endl;
+        std::cout << "- : " << q4 << std::endl;
+
+        auto q5 = mostPopularHobby(users);
+        std::cout << "---------Q5 : mostPopularHobby---------" << std::endl;
+        std::cout << "- : " << q5 << std::endl;
+
     }
 
     return 0;

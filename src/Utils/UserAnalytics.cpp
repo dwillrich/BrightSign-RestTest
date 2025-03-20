@@ -65,18 +65,91 @@ std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& user
 }
 
 // 3. the user with the most friends per city
-User mostPopularUserPerCity(const std::vector<User>& users) {
-    return User();
+std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users) {
+    if(users.size() < 1) {
+        return std::map<std::string,User>();
+    }
+    std::map<std::string,User> retVal;
+    auto cityMap = getCityUserMap(users);
+    for(auto city : cityMap) {
+        // Safe to assume all cities have atleast one user
+        retVal[city.first] = city.second[0];
+        for(auto user : city.second) {
+            if(user.friends.size() > retVal[city.first].friends.size()) {
+                retVal[city.first] = user;
+            }
+        }
+    }
+    return retVal;
 }
 
 // 4. the most common first name in all cities
 // Note : Include friends
 std::string mostPopularName(const std::vector<User>& users) {
-    return "Derek";
+    if(users.size() < 1) {
+        return "";
+    }
+
+    std::map<std::string, int> nameCountMap;
+    for(auto user : users) {
+        // For users
+        if(nameCountMap.find(*user.name) != nameCountMap.end()) {
+            nameCountMap[*user.name]++;
+        } else {
+            // First one
+            nameCountMap[*user.name] = 1;
+        }
+
+        // For their friends
+        for(auto f : user.friends) {
+            if(nameCountMap.find(*f.name) != nameCountMap.end()) {
+                nameCountMap[*f.name]++;
+            } else {
+                // First one
+                nameCountMap[*f.name] = 1;
+            }
+        }
+    }
+
+    std::string popularName = nameCountMap.begin()->first;
+    for(auto name : nameCountMap) {
+        if(name.second > nameCountMap[popularName]) {
+            popularName = name.first;
+        }
+    }
+
+    return popularName;
 }
 
 // 5. the most common hobby of all friends of users in all cities
 std::string mostPopularHobby(const std::vector<User>& users) {
-    return "Coding";
+    if(users.size() < 1) {
+        return "";
+    }
+
+    std::map<std::string, int> hobbyCountMap;
+    for(auto user : users) {
+        // For users they don't have hobbies
+        // For their friends
+        for(auto f : user.friends) {
+            for(auto h : f.hobbies) {
+                if(hobbyCountMap.find(h) != hobbyCountMap.end()) {
+                    hobbyCountMap[h]++;
+                } else {
+                    // First one
+                    hobbyCountMap[h] = 1;
+                }
+            }
+        }
+    }
+
+    std::string popularHobby = hobbyCountMap.begin()->first;
+    for(auto hobby : hobbyCountMap) {
+        if(hobby.second > hobbyCountMap[popularHobby]) {
+            popularHobby = hobby.first;
+        }
+    }
+
+    return popularHobby;
 }
 } // namespace UsersAndFriends

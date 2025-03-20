@@ -16,10 +16,11 @@ std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& u
 std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& users);
 
 // 3. the user with the most friends per city
-User mostPopularUserPerCity(const std::vector<User>& users);
+std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users);
 
 // 4. the most common first name in all cities
-// Note : Include friends
+// Note : Include friends I assume here
+// Note : Says "in all" cities so going with one overall answer instead of one per city
 std::string mostPopularName(const std::vector<User>& users);
 
 // 5. the most common hobby of all friends of users in all cities

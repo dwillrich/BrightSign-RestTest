@@ -112,9 +112,13 @@ This implementation expects sufficient RAM to hold the returned data for the RES
 - The API is given 5 seconds to respond. This is arbitrary but I tried to test with throttled network and it seemed sufficient. 
 - Notes on the analytics performance can be seen in the comments in UserAnalytics.cpp
 - Threading could be used for the data processing to achieve better throughput but in theory it may be better to have the calling application specify which result it wants and run each analytic task on its own thread with the memory consuption increasing being the tradeoff here. 
+- getCityUserMap in Analytics shouldn't need to be run for each function and could be run once
 
-### Improvements
-Other stuff.
+## Improvements
+- Logger would be nice to make printf compatible with vargs and not just accept strings.
+- Evaluate performance further in terms of speed and memory usage.
+- For whatever reason the json.hpp header isn't found so it is coppied into src/ dir for now despite being looked for by CMAKE.
+
 
 ## API Issues
 In summary this API is far from ideal and is not production ready. Building out the client there are a number of issues seen that will be listed here as issue tickets `BUG-<num>`. This is not an all inclusive list as I am sure there are some overlooked here. 
