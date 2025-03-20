@@ -18,8 +18,8 @@ double average_vector(const std::vector<int>& vec) {
 // Transform data from array of users and organize by city
 // Should run in O(n)
 // For now do not do in place and take easy route using more memory
-std::map<std::string, std::vector<User>> getCityUserMap(const std::vector<User>& users) {
-    std::map<std::string, std::vector<User>> retVal;
+std::unordered_map<std::string, std::vector<User>> getCityUserMap(const std::vector<User>& users) {
+    std::unordered_map<std::string, std::vector<User>> retVal;
     for(auto user : users) {
         std::string cityName = (user.city ? *user.city : "Unknown");
         retVal[cityName].push_back(user);
@@ -29,10 +29,11 @@ std::map<std::string, std::vector<User>> getCityUserMap(const std::vector<User>&
 }
 
 // 1. average age of all users per city
+// Should run in O(n)
 // For now do not do in place and take easy route using more memory
-std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users) {
+std::unordered_map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users) {
     Logger& logger = Logger::getInstance();
-    std::map<std::string,double> retVal;
+    std::unordered_map<std::string,double> retVal;
     auto cityMap = getCityUserMap(users);
     std::vector<int> agesInCity;
     for(auto city : cityMap) {
@@ -51,8 +52,9 @@ std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& u
 }
 
 // 2. average number of friends per city
-std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& users) {
-    std::map<std::string,double> retVal;
+// Should run in O(n)
+std::unordered_map<std::string,double> averageFriendsPerCity(const std::vector<User>& users) {
+    std::unordered_map<std::string,double> retVal;
     auto cityMap = getCityUserMap(users);
     std::vector<int> friendCountInCity;
     for(auto city : cityMap) {
@@ -67,12 +69,13 @@ std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& user
 }
 
 // 3. the user with the most friends per city
+// Should run in O(n)
 // Note : this says user not user name so despite only returning the users name return whole object
-std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users) {
+std::unordered_map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users) {
     if(users.size() < 1) {
-        return std::map<std::string,User>();
+        return std::unordered_map<std::string,User>();
     }
-    std::map<std::string,User> retVal;
+    std::unordered_map<std::string,User> retVal;
     auto cityMap = getCityUserMap(users);
     for(auto city : cityMap) {
         // Safe to assume all cities have atleast one user
@@ -88,13 +91,14 @@ std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users
 }
 
 // 4. the most common first name in all cities
+// Should run in O(n)
 // Note : Include friends
 std::string mostPopularName(const std::vector<User>& users) {
     if(users.size() < 1) {
         return "";
     }
 
-    std::map<std::string, int> nameCountMap;
+    std::unordered_map<std::string, int> nameCountMap;
     for(auto user : users) {
         // For users
         if(nameCountMap.find(*user.name) != nameCountMap.end()) {
@@ -126,12 +130,13 @@ std::string mostPopularName(const std::vector<User>& users) {
 }
 
 // 5. the most common hobby of all friends of users in all cities
+// Should run in O(n) (n = hobbies + friends)
 std::string mostPopularHobby(const std::vector<User>& users) {
     if(users.size() < 1) {
         return "";
     }
 
-    std::map<std::string, int> hobbyCountMap;
+    std::unordered_map<std::string, int> hobbyCountMap;
     for(auto user : users) {
         // For users they don't have hobbies
         // For their friends

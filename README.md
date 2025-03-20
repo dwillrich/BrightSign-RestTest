@@ -38,6 +38,16 @@ For running the test simply call the *-tests bin generated in the build output d
 ./build/fakerest-test
 ```
 
+## Tests
+#### test_UrlValidator
+This was a quick proof of concept just to check the regex.
+
+#### test_UserAndFriends
+This test will quickly test out the parsing logic. There is a helper script `getSampleResponses.sh` in tools to populate the samples directory for the first test or you can use failed/saved of files from /tmp/ to populate it more intentionally. No samples are provided for repo size purposes. The second test in here queries the rest endpoint. There is an issue with this one for the cases where JSON is not parsable by jq (See BUG-4 below). It will fail intermitently unfortunately. Both tests will write failed queries to tmp for further analysis.
+
+#### test_UserAnalytics
+Quick easy checks on the logic behind the calculations. This could be more intensive but the calculations are faily straight forward.
+
 ## Logging
 To view logs they are defaulted writing to syslog. You can change this with the defines at the top of Logger.cpp. To view logs while it runs use the following command:
 ```bash
@@ -245,7 +255,7 @@ This implementation expects sufficient RAM to hold the returned data for the RES
 ## Improvements
 - Logger would be nice to make printf compatible with vargs and not just accept strings.
 - Evaluate performance further in terms of speed and memory usage.
-- For whatever reason the json.hpp header isn't found so it is coppied into src/ dir for now despite being looked for by CMAKE.
+- For whatever reason the json.hpp header isn't found so it is copied into src/ dir for now despite being looked for by CMAKE.
 
 
 ## API Issues

@@ -24,4 +24,4 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /fakerest-test
 
-CMD rm -rf build && mkdir -p build && cd build && cmake .. && make && ./fakerest
+CMD rm -rf build && mkdir -p build && cd build && cmake .. && make

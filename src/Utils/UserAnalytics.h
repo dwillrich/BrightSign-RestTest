@@ -10,13 +10,13 @@
 namespace UsersAndFriends {
 
 // 1. average age of all users per city
-std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users);
+std::unordered_map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users);
 
 // 2. average number of friends per city
-std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& users);
+std::unordered_map<std::string,double> averageFriendsPerCity(const std::vector<User>& users);
 
 // 3. the user with the most friends per city
-std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users);
+std::unordered_map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users);
 
 // 4. the most common first name in all cities
 // Note : Include friends I assume here

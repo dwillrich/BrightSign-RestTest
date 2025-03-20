@@ -39,7 +39,8 @@ add_library(fakerest-utils STATIC ${UTILS_FILES} ${UTILS_HEADERS} ${nlohmann_jso
 add_executable(fakerest src/main.cpp ${HEADER_FILES})
 target_link_libraries(fakerest PRIVATE fakerest-utils CURL::libcurl nlohmann_json::nlohmann_json ${JSONCPP_LIBRARIES})
 
-add_dependencies(fakerest format)
+# Move to utils as they are built first
+add_dependencies(fakerest-utils format)
 
 file(GLOB TEST_FILES tests/*.cpp)
 if(TEST_FILES)

@@ -45,7 +45,7 @@ TEST(UsersAndFriendsTest, ProcessAllSamplesInDir) {
 
 // This is less of a unit test but saves effort of saving files
 // Doesn't do any inteligent checking of the parsed data but ensures we can handle everything the url hits us with
-// Have ran with 1000 itterations, 100 is probably okay though
+// Have ran with 1000 itterations, 10 is probably okay though
 TEST(UsersAndFriendsTest, ProcessFromAPI) {
     Logger& logger = Logger::getInstance();
     std::string url = "http://test.brightsign.io:3000";
@@ -55,7 +55,7 @@ TEST(UsersAndFriendsTest, ProcessFromAPI) {
     std::vector<User> users;
     std::vector<std::string> badFiles;
 
-    for(int i = 0; i < 0; i++) {
+    for(int i = 0; i < 10; i++) {
         SimpleUrlFetcher fetcher;
         std::string response = fetcher.fetchData(url);
 

@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
         outputJson["C4"] = c4;
         outputJson["C5"] = c5;
 
-        // No pretty print here but jq can help 
+        // No pretty print here but jq can help
         std::cout << outputJson.dump() << std::endl;
 
     }
