@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
     Logger& logger = Logger::getInstance();
     std::string url = "http://test.brightsign.io:3000";
 
-    // TODO - Make this mandatory later and err out
     if (argc > 1) {
         url = argv[1];
     }
@@ -20,15 +19,6 @@ int main(int argc, char* argv[]) {
     logger.logInfo("Fetching data from: " + url);
 
     SimpleUrlFetcher fetcher;
-
-    // This doesn't work right now so comment out and loop through data line by line instead
-    // All this and sometimes it isn't sent one item a line!!!!
-    // auto lineCb = [](const std::string& line) {
-    //     // std::cout << line << std::endl;
-    // };
-    // fetcher.fetchDataByLine(url, lineCb);
-    // return 0;
-
     std::string response = fetcher.fetchData(url);
 
     if (response.empty()) {
@@ -52,31 +42,21 @@ int main(int argc, char* argv[]) {
         logger.logError("JSON Parsing Fail -> User Count: " + std::to_string(users.size()));
         return 1;
     } else {
-        auto q1 = averageAgeOfUsersPerCity(users);
-        std::cout << "---------Q1 : averageAgeOfUsersPerCity---------" << std::endl;
-        for (std::map<std::string, double>::iterator it = q1.begin(); it != q1.end(); ++it) {
-            std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
-        }
+        auto c1 = averageAgeOfUsersPerCity(users);
+        auto c2 = averageFriendsPerCity(users);
+        auto c3 = mostPopularUserPerCity(users);
+        auto c4 = mostPopularName(users);
+        auto c5 = mostPopularHobby(users);
 
-        auto q2 = averageFriendsPerCity(users);
-        std::cout << "---------Q2 : averageFriendsPerCity---------" << std::endl;
-        for (std::map<std::string, double>::iterator it = q2.begin(); it != q2.end(); ++it) {
-            std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
-        }
+        json outputJson;
+        outputJson["C1"] = c1;
+        outputJson["C2"] = c2;
+        outputJson["C3"] = c3;
+        outputJson["C4"] = c4;
+        outputJson["C5"] = c5;
 
-        auto q3 = mostPopularUserPerCity(users);
-        std::cout << "---------Q3 : mostPopularUserPerCity---------" << std::endl;
-        for (std::map<std::string, User>::iterator it = q3.begin(); it != q3.end(); ++it) {
-            std::cout << "Key: " << it->first << ", Value: " << *it->second.name << std::endl;
-        }
-
-        auto q4 = mostPopularName(users);
-        std::cout << "---------Q4 : mostPopularName---------" << std::endl;
-        std::cout << "- : " << q4 << std::endl;
-
-        auto q5 = mostPopularHobby(users);
-        std::cout << "---------Q5 : mostPopularHobby---------" << std::endl;
-        std::cout << "- : " << q5 << std::endl;
+        // No pretty print here but jq can help 
+        std::cout << outputJson.dump() << std::endl;
 
     }
 

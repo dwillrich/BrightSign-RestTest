@@ -5,6 +5,37 @@
 
 namespace UsersAndFriends {
 
+
+void to_json(json& j, const Friend& f) {
+    if(f.name) {
+        j["name"] = *f.name;
+    }
+    j["hobbies"] = f.hobbies;
+}
+
+// void to_json(json& j, const std::vector<Friend>& fs) {
+//     json ij = json(fs);
+//     j = ij;
+// }
+
+void to_json(json& j, const User& u) {
+    if(u.id) {
+        j["id"] = *u.id;
+    }
+    if(u.name) {
+        j["name"] = u.name;
+    }
+    if(u.city) {
+        j["city"] = *u.city;
+    }
+    if(u.age) {
+        j["age"] = *u.age;
+    }
+
+    j["friends"] = u.friends;
+
+}
+
 void from_json(const json& j, Friend& f) {
     if(j.contains("name")) {
         f.name = j.at("name").get<std::string>();

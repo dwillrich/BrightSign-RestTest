@@ -24,11 +24,11 @@ std::map<std::string, std::vector<User>> getCityUserMap(const std::vector<User>&
         std::string cityName = (user.city ? *user.city : "Unknown");
         retVal[cityName].push_back(user);
     }
+    // Let RVO get rid of this copy
     return retVal;
 }
 
 // 1. average age of all users per city
-// Should run in O(2n)?????????
 // For now do not do in place and take easy route using more memory
 std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& users) {
     Logger& logger = Logger::getInstance();
@@ -46,6 +46,7 @@ std::map<std::string,double> averageAgeOfUsersPerCity(const std::vector<User>& u
         retVal[city.first] = average_vector(agesInCity);
         agesInCity.clear();
     }
+    // Let RVO get rid of this copy
     return retVal;
 }
 
@@ -61,10 +62,12 @@ std::map<std::string,double> averageFriendsPerCity(const std::vector<User>& user
         retVal[city.first] = average_vector(friendCountInCity);
         friendCountInCity.clear();
     }
+    // Let RVO get rid of this copy
     return retVal;
 }
 
 // 3. the user with the most friends per city
+// Note : this says user not user name so despite only returning the users name return whole object
 std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users) {
     if(users.size() < 1) {
         return std::map<std::string,User>();
@@ -80,6 +83,7 @@ std::map<std::string,User> mostPopularUserPerCity(const std::vector<User>& users
             }
         }
     }
+    // Let RVO get rid of this copy
     return retVal;
 }
 

@@ -26,8 +26,11 @@ struct User {
     std::vector<Friend> friends;
 };
 
+void to_json(json& j, const Friend& f);
+void to_json(json& j, const User& u);
+
 void from_json(const json& j, Friend& f);
-void from_json(const json& j, User& p);
+void from_json(const json& j, User& u);
 
 // Can probably just print JSON here but this is fine
 void to_log(const Friend& f, Logger& logger);

@@ -12,8 +12,10 @@ class Logger {
     void logError(const std::string& message);
 
   private:
-    Logger() = default;
-    ~Logger() = default;
+    Logger();
+    ~Logger();
+    // Logger() = default;
+    // ~Logger() = default;
 
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;

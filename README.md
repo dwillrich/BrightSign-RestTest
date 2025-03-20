@@ -38,6 +38,12 @@ For running the test simply call the *-tests bin generated in the build output d
 ./build/fakerest-test
 ```
 
+## Logging
+To view logs they are defaulted writing to syslog. You can change this with the defines at the top of Logger.cpp. To view logs while it runs use the following command:
+```bash
+tail -f /var/log/syslog
+```
+
 ## REST Data Format
 ```json
 {
@@ -89,8 +95,130 @@ General Notes:
 
 ## Output
 ```json
-Insert a sample response here
+{
+  "C1": {
+    "Austin": 58.558801591248134,
+    "Boston": 57.863036303630366
+  },
+  "C2": {
+    "Austin": 4.006464445549478,
+    "Boston": 4.006854531607007
+  },
+  "C3": {
+    "Austin": {
+      "age": 42,
+      "city": "Austin",
+      "friends": [
+        {
+          "hobbies": [
+            "Volunteer Work",
+            "Gardening",
+            "Cooking"
+          ],
+          "name": "Levi"
+        },
+        {
+          "hobbies": [
+            "Podcasts",
+            "Traveling",
+            "Woodworking"
+          ],
+          "name": "Ava"
+        },
+        {
+          "hobbies": [
+            "Martial Arts",
+            "Traveling",
+            "Housework"
+          ],
+          "name": "Noah"
+        },
+        {
+          "hobbies": [
+            "Yoga",
+            "Quilting",
+            "Housework"
+          ],
+          "name": "Daniel"
+        },
+        {
+          "hobbies": [
+            "Housework",
+            "Writing"
+          ],
+          "name": "Sarah"
+        },
+        {
+          "hobbies": [
+            "Yoga",
+            "Martial Arts",
+            "Church Activities"
+          ],
+          "name": "Sophie"
+        }
+      ],
+      "id": 400097,
+      "name": "Michael"
+    },
+    "Boston": {
+      "age": 79,
+      "city": "Boston",
+      "friends": [
+        {
+          "hobbies": [
+            "Socializing",
+            "Painting"
+          ],
+          "name": "Mateo"
+        },
+        {
+          "hobbies": [
+            "Podcasts",
+            "Shopping"
+          ],
+          "name": "Robert"
+        },
+        {
+          "hobbies": [
+            "Walking",
+            "Dancing"
+          ],
+          "name": "Oliver"
+        },
+        {
+          "hobbies": [
+            "Cooking",
+            "Genealogy"
+          ],
+          "name": "Elijah"
+        },
+        {
+          "hobbies": [
+            "Walking",
+            "Dancing",
+            "Genealogy"
+          ],
+          "name": "Kevin"
+        },
+        {
+          "hobbies": [
+            "Cooking",
+            "Dancing",
+            "Television"
+          ],
+          "name": "Luke"
+        }
+      ],
+      "id": 400119,
+      "name": "Mateo"
+    }
+  },
+  "C4": "Mia",
+  "C5": "Woodworking"
+}
 ```
+Output of the program is just the json with all calculations in it using the format C# denoting the calculation. For C1-C3 the data is output as a map of city->value and for C4 and C5 it is just output as a string. To parse out just one calculation pipe it to jq. ie. For C4 use this `./build/fakerest | jq .C4` 
+
 
 ## Security Considerations
 Ideally this API would have a valid SSL certificate that we could verify and we could use the following curl options to verify it.
