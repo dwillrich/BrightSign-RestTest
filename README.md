@@ -68,7 +68,7 @@ We will call the top level JSON a User for the purpose of this application and c
 Notes on User fields:
 `user.id` - This is a `uint` for a unique id for the user. Is not always present though. Not sure what policy should be on this.
 `user.name` - This is a `string` representing the name of the user. These are not unique it seems.
-`user.city` - This is a `string` representing the city of the user
+`user.city` - This is a `string` representing the city of the user. 
 `user.age` - This is a `uint` representing the age of the user
 `user.friends` - This is an array of Friends
 
@@ -76,9 +76,14 @@ Notes on User fields:
 `friend.hobbies` - Seems to always be present? Can it be empty or missing?
 
 General Notes:
-- Always seems to be valid JSON
+- Will respond with HTML error page, 500 error on page, no data or actual JSON
 - Sometimes is sent as an array [] -> ruins streaming the url line by line
-- Sometimes is sent as a json object per line 
+- Sometimes is sent as a json object per line
+- Sometimes is sent as a pretty printed non-array set of json objects
+- Sometimes is missing fields id and city
+- Assume some people have no friends
+- Some people have no hobbies?
+- Will respond with HTML error page, 500 error on page, no data or actual JSON
 
 ## Output
 ```json
