@@ -18,7 +18,7 @@ void to_json(json& j, const User& u) {
         j["id"] = *u.id;
     }
     if(u.name) {
-        j["name"] = u.name;
+        j["name"] = *u.name;
     }
     if(u.city) {
         j["city"] = *u.city;
@@ -28,7 +28,6 @@ void to_json(json& j, const User& u) {
     }
 
     j["friends"] = u.friends;
-
 }
 
 void from_json(const json& j, Friend& f) {

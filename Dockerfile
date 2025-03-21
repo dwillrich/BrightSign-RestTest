@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     curl \
     libcurl4-openssl-dev \
-    libjsoncpp-dev \
     git \
     unzip \
     wget \

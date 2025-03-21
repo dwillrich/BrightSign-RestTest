@@ -5,8 +5,9 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 #include "Logger.h"
+#include <optional>
 
 // Don't like doing this in header but fine for now
 using json = nlohmann::json;
