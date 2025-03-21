@@ -255,8 +255,7 @@ This implementation expects sufficient RAM to hold the returned data for the RES
 ## Improvements
 - Logger would be nice to make printf compatible with vargs and not just accept strings.
 - Evaluate performance further in terms of speed and memory usage.
-- For whatever reason the json.hpp header isn't found so it is copied into src/ dir for now despite being looked for by CMAKE.
-
+- Look at options for better defining the API with something like protocol buffers that could be shared as a submodule or something between client and server
 
 ## API Issues
 In summary this API is far from ideal and is not production ready. Building out the client there are a number of issues seen that will be listed here as issue tickets `BUG-<num>`. This is not an all inclusive list as I am sure there are some overlooked here. 
@@ -278,3 +277,6 @@ In summary this API is far from ideal and is not production ready. Building out 
 - This is where I drew a line in the sand on "nicely" handling the API responses. Occasionally even jq does not properly parse the responses containing JSON data returned.
 - Would be easy enough to gather more data on this by modifying the getSampleResponses.sh tools script to pipe to jq and only save off the responses that fail that check.
 - Quick glance and I see `]}]}{` at the end of a line occasionally and just stop processing data after that error occurs.  
+
+#### BUG-5 : [API][Major] API Occasionally Returns 0 bytes of data
+- This one seems to happen randomly but a response of no data will be returned. No empty json object, no whitespace, just no data at all.
