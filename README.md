@@ -30,7 +30,7 @@ To build a docker image and build inside docker run the following. This will ens
 
 For running the application simply call it with the target URL or it will default to the following "http://test.brightsign.io:3000".
 ```bash
-./build/fakerest
+./build/fakerest http://test.brightsign.io:3000
 ```
 
 For running the test simply call the *-tests bin generated in the build output directory.

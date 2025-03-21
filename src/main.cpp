@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     bool jsonParsed = false;
 
     // Should add flag for this
-    bool useFile = true;
+    bool useFile = false;
 
     if(!useFile) {
         // Leaving this even though default is way easier
