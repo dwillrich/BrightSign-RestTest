@@ -11,26 +11,43 @@ using namespace UsersAndFriends;
 int main(int argc, char* argv[]) {
     Logger& logger = Logger::getInstance();
     std::string url = "http://test.brightsign.io:3000";
+    std::string fileName = "./samples/fakeRestData";
 
-    // Leaving this even though default is way easier
-    // Requirements said param so param it is
-    if (argc > 1) {
-        url = argv[1];
-    }
+    std::vector<User> users;
+    bool jsonParsed = false;
 
-    logger.logInfo("Fetching data from: " + url);
+    // Should add flag for this
+    bool useFile = true;
 
-    SimpleUrlFetcher fetcher;
-    std::string response = fetcher.fetchData(url);
+    if(!useFile) {
+        // Leaving this even though default is way easier
+        // Requirements said param so param it is
+        if (argc > 1) {
+            url = argv[1];
+        }
 
-    if (response.empty()) {
-        logger.logError("Failed to fetch data from URL.");
-        return 1;
+        logger.logInfo("Fetching data from: " + url);
+
+        SimpleUrlFetcher fetcher;
+        std::string response = fetcher.fetchData(url);
+
+        if (response.empty()) {
+            logger.logError("Failed to fetch data from URL.");
+            return 1;
+        }
+        jsonParsed = buildUserVectorFromJsonString(response, users);
+    } else {
+        if (argc > 1) {
+            fileName = argv[1];
+        }
+
+        logger.logInfo("Fetching data from file: " + fileName);
+        jsonParsed = buildUserVectorFromFile(fileName, users);
     }
 
     // For debugging save the REST data to file
     // Too useful to fully delete yet
-    #if 0
+#if 0
     std::string restDataFile = MiscUtils::writeStringToTmpFile(response);
     if(restDataFile != "" ) {
         logger.logInfo("Wrote REST data to : " + restDataFile);
@@ -38,10 +55,11 @@ int main(int argc, char* argv[]) {
         logger.logError("Failed to write REST data to file");
         return 1;
     }
-    #endif
+#endif
 
-    std::vector<User> users;
-    bool jsonParsed = buildUserVectorFromJsonString(response, users);
+    if(!useFile) {
+
+    }
     logger.logInfo("Got the following user count: " + std::to_string(users.size()));
     if(!jsonParsed) {
         logger.logError("JSON Parsing Fail -> User Count: " + std::to_string(users.size()));

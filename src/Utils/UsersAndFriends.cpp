@@ -110,6 +110,10 @@ bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users)
     Logger& logger = Logger::getInstance();
     json j;
     try {
+        if(is_whitespace_only_ws(iStream)) {
+            return false;
+        }
+
         iStream >> j;
 
         // Annoyingly data is sometimes an array sometimes not
@@ -147,12 +151,22 @@ bool buildUserVectorFromIstream(std::istream& iStream, std::vector<User>& users)
 }
 
 bool buildUserVectorFromJsonString(const std::string& jsonStr, std::vector<User>& users) {
+    // Check for empty strings and return true since nothing was parsed successfully
+    if(jsonStr.size() == 0) {
+        return true;
+    }
     std::istringstream jsonStream(jsonStr);
     return buildUserVectorFromIstream(jsonStream, users);
 }
 
 bool buildUserVectorFromFile(const std::string& fileName, std::vector<User>& users) {
     Logger& logger = Logger::getInstance();
+
+    // Check for empty files and return true since nothing was parsed successfully
+    if(std::filesystem::file_size(fileName) == 0) {
+        return true;
+    }
+
     std::ifstream file(fileName);
     if (!file) {
         logger.logError("Error opening file: " + fileName);
